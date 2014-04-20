@@ -87,7 +87,8 @@ void draw() {
     
  textAlign(LEFT, CENTER);
  textFont(font50, 20);
- text("Connected to: "+device, 0, 30);
+ text("Connected to: "+device, 5, 10);
+ text("Received: "+info, 5, 30);
 }
 
 
@@ -118,20 +119,30 @@ void onBluetoothDataEvent(String who, byte[] data) {
  if (isConfiguring)
  return;
  //received
- info += new String(data);
+ String d = new String(data);
  
  System.out.println("event happened");
  System.out.println(info);
     
   //Recieve stuff here
   //info = "0.0,0.0,0.0;";
- if (info == ";") {
+ if (d.equals(";")) {
+    System.out.println("command recieved. parsing data.");
     //parse it
+    info += ",40.0";
     String[] s = info.split(",");
-    battery = Float.parseFloat(s[0]);
-    drawn = Float.parseFloat(s[1]);
-    speed = Float.parseFloat(s[2]);
     //clean it 
+    info = null;
     info = "";
+    System.out.println("Resetting info");
+    
+    
+    drawn = Float.parseFloat(s[0]);
+    speed = Float.parseFloat(s[1]);
+    battery = Float.parseFloat(s[2]);
+    
+ } else {
+   info += d;
  }
+
 }
